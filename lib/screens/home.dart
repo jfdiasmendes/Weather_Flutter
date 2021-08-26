@@ -11,7 +11,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final int hour = TimeOfDay.now().hour;
-  String sDoN;
+  String sDoN='W';
   WeatherBloc bloc;
 
   @override

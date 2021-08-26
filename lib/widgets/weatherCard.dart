@@ -3,6 +3,7 @@ import 'package:weather/models/weather.dart';
 
 class WeatherCard extends StatelessWidget {
   final Weather weather;
+  final String imageUrl = "https://openweathermap.org/img/wn/{iconCode}@4x.png";
 
   WeatherCard(this.weather);
 
@@ -13,17 +14,16 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Construindo card: " + weather.toString());
     final List<int> argb = themes[weather.dyNght];
+
     final Color textColor = argb[0] == 10 ? Colors.grey[100] : Colors.black;
 
     Widget renderIcon() {
       if (weather.icon.isNotEmpty) {
         return Padding(
           padding: EdgeInsets.all(19),
-          child: Image.asset(
-            "icons/${weather.icon}.png",
-            height: 190,
-          ),
+          child: Image.network(imageUrl.replaceAll('{iconCode}', weather.icon)),
         );
       }
       return Container();

@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:weather/models/location.dart';
 
 class Weather {
-  final String base = "https://dsx.weather.com/wxd/v2/MORecord/pt_BR/";
+  final String apiKey = '3ef171058f28b690a82e767a7cbb2559';
+  final String base = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
+  final String iconsUrl = "https://openweathermap.org/img/wn/{iconCode}@4x.png";
 
   static final Weather _instance = Weather.internal();
 
@@ -42,46 +45,42 @@ class Weather {
   Future<void> fetchForecast(Location location) async {
     if (location.geocode == null) return null;
 
-    http.Response response = await http.get(base + location.geocode);
+    String urlRequest = base.replaceAll("{lat}", location.geocode.split(",")[0]).replaceAll("{lon}", location.geocode.split(",")[1]).replaceAll("{API key}", apiKey);
+
+    debugPrint("URL Request: " + urlRequest);
+    debugPrint("Geocode: " + location.geocode);
+    debugPrint("State Code: " + location.stCd);
+
+    http.Response response = await http.get(urlRequest);
+
+    debugPrint("Response Code: " + response.statusCode.toString());
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body)['MOData'];
+      //Map<String, dynamic> data = json.decode(response.body)['main'];
+      List<dynamic> data = json.decode(response.body)['main'];
 
-      temp = data['tmpC'].toString();
-      status = data['wx'];
-      dyNght = data['dyNght'];
-      icon = handleIcon(status, dyNght);
+      List<String> itensLista = data.map((e) => e as String).toList();
+
+      temp = itensLista[0].toString();
+
+      data = json.decode(response.body)['weather'];
+      //status = data['description'];
+      //icon = data['icon'];
+
+      if (icon.contains('c')) dyNght='D'; else dyNght='N';
+
       city = location.cityNm;
       country = location.stCd;
+
+      debugPrint("Weather dados: " + this.toString());
     }
-    
+
+    debugPrint("Weather dados: " + this.toString());
   }
 
-  String handleIcon(icons, dyNght) {
-
-    int index;
-
-    Map<String, List> conditions = {
-      'Parcial. nublado': ['partly-cloudy','partly-cloudy-night'],
-      'Chuva forte': ['storm-weather-day', 'storm-weather-night'],
-      'Chuva fraca': ['rainy-day', 'rainy-night'],
-      'Encoberto' : ['cloudy-weather','cloudy-weather'],
-      'Nublado': ['cloudy-weather','cloudy-weather'],
-      'Limpo' : ['clear-day', 'clear-night'],
-      'Chuva': ['rainy-day', 'rainy-night'],
-      'Ensolarado': ['clear-day','clear-day'],
-      'Nevoeiro': ['haze-day', 'haze-night'],
-      'Pancada de chuva': ['showcase', 'storm-weather-night']
-    };
-
-    if(dyNght == 'D') index = 0; else index = 1; 
-
-    return conditions[icons][index] ?? 'unknown';
-
-  }
 
   @override
   String toString() {
-    return "Weather (icon: $icon, temp: $temp, status: $status)";
+    return "Weather (icon: $icon, temp: $temp, status: $status, DayNight: $dyNght, CityName:$city)";
   }
 }
