@@ -14,7 +14,6 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Construindo card: " + weather.toString());
     final List<int> argb = themes[weather.dyNght];
 
     final Color textColor = argb[0] == 10 ? Colors.grey[100] : Colors.black;

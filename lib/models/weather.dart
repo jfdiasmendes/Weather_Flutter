@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -7,7 +6,6 @@ import 'package:weather/models/location.dart';
 class Weather {
   final String apiKey = '3ef171058f28b690a82e767a7cbb2559';
   final String base = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
-  final String iconsUrl = "https://openweathermap.org/img/wn/{iconCode}@4x.png";
 
   static final Weather _instance = Weather.internal();
 
@@ -47,35 +45,24 @@ class Weather {
 
     String urlRequest = base.replaceAll("{lat}", location.geocode.split(",")[0]).replaceAll("{lon}", location.geocode.split(",")[1]).replaceAll("{API key}", apiKey);
 
-    debugPrint("URL Request: " + urlRequest);
-    debugPrint("Geocode: " + location.geocode);
-    debugPrint("State Code: " + location.stCd);
-
     http.Response response = await http.get(urlRequest);
 
-    debugPrint("Response Code: " + response.statusCode.toString());
-
     if (response.statusCode == 200) {
-      //Map<String, dynamic> data = json.decode(response.body)['main'];
-      List<dynamic> data = json.decode(response.body)['main'];
+      List<dynamic> data = json.decode("[" + response.body + "]");
 
-      List<String> itensLista = data.map((e) => e as String).toList();
+      Map<String, dynamic> map= data[0];
+      Map<String, dynamic> main= map['main'];
+      Map<String, dynamic> weather = map['weather'][0];
 
-      temp = itensLista[0].toString();
+      temp = main['temp'].toString();
+      status = weather['description'].toString();
+      icon = weather['icon'].toString();
 
-      data = json.decode(response.body)['weather'];
-      //status = data['description'];
-      //icon = data['icon'];
-
-      if (icon.contains('c')) dyNght='D'; else dyNght='N';
+      if (icon.contains('d')) dyNght='D'; else dyNght='N';
 
       city = location.cityNm;
       country = location.stCd;
-
-      debugPrint("Weather dados: " + this.toString());
     }
-
-    debugPrint("Weather dados: " + this.toString());
   }
 
 
