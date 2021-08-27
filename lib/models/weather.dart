@@ -5,7 +5,8 @@ import 'package:weather/models/location.dart';
 
 class Weather {
   final String apiKey = '3ef171058f28b690a82e767a7cbb2559';
-  final String base = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
+  final String base =
+      "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
 
   static final Weather _instance = Weather.internal();
 
@@ -43,28 +44,33 @@ class Weather {
   Future<void> fetchForecast(Location location) async {
     if (location.geocode == null) return null;
 
-    String urlRequest = base.replaceAll("{lat}", location.geocode.split(",")[0]).replaceAll("{lon}", location.geocode.split(",")[1]).replaceAll("{API key}", apiKey);
+    String urlRequest = base
+        .replaceAll("{lat}", location.geocode.split(",")[0])
+        .replaceAll("{lon}", location.geocode.split(",")[1])
+        .replaceAll("{API key}", apiKey);
 
     http.Response response = await http.get(urlRequest);
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode("[" + response.body + "]");
 
-      Map<String, dynamic> map= data[0];
-      Map<String, dynamic> main= map['main'];
+      Map<String, dynamic> map = data[0];
+      Map<String, dynamic> main = map['main'];
       Map<String, dynamic> weather = map['weather'][0];
 
       temp = main['temp'].toString();
       status = weather['description'].toString();
       icon = weather['icon'].toString();
 
-      if (icon.contains('d')) dyNght='D'; else dyNght='N';
+      if (icon.contains('d'))
+        dyNght = 'D';
+      else
+        dyNght = 'N';
 
       city = location.cityNm;
       country = location.stCd;
     }
   }
-
 
   @override
   String toString() {

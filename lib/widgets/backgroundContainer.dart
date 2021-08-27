@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BackgroudContainer extends StatelessWidget {
-
   final String theme;
 
   BackgroudContainer(this.theme);

@@ -3,9 +3,8 @@ import 'package:weather/models/weather.dart';
 import 'dart:async';
 
 class WeatherBloc {
-
   static final WeatherBloc _bloc = new WeatherBloc._internal();
-  factory WeatherBloc(){
+  factory WeatherBloc() {
     return _bloc;
   }
   WeatherBloc._internal();
@@ -23,7 +22,7 @@ class WeatherBloc {
 
   void main() async {
     await location.getStoredLocation();
-    if(location?.geocode != null){
+    if (location?.geocode != null) {
       await weatherStart(location);
     }
   }
