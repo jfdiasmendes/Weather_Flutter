@@ -21,7 +21,7 @@ class WeatherBloc {
   Stream get getDayOrNight => _weatherDNController.stream;
 
   void main() async {
-    await location.getStoredLocation();
+    await location.getLocalLocation();
     if (location?.geocode != null) {
       await weatherStart(location);
     }

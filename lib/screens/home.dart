@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:weather/widgets/backgroundContainer.dart';
 import 'package:weather/widgets/weatherCard.dart';
 import 'package:weather/blocs/weather-bloc.dart';
@@ -74,6 +75,13 @@ class _HomeState extends State<Home> {
                       delegate: CustomSearchDelegate(),
                     ).then((location) =>
                         location != null ? bloc.setLocation(location) : null);
+                  }),
+              IconButton(
+                  icon:
+                  Icon(Icons.add_location_outlined, color: Theme.of(context).accentColor),
+                  onPressed: () {
+                    bloc.main();
+
                   }),
             ],
           ),
