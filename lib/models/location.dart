@@ -65,7 +65,7 @@ class Location {
   }
 
   _getCurrentLocation() async {
-    Geolocator
+    await Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
         .then((Position position) {
       _currentPosition = position;

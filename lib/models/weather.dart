@@ -4,9 +4,8 @@ import 'dart:convert';
 import 'package:weather/models/location.dart';
 
 class Weather {
-  final String apiKey = '3ef171058f28b690a82e767a7cbb2559';
-  final String base =
-      "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
+  final String apiKey = "cda95ca8086740b197d144017213008&q"; //'3ef171058f28b690a82e767a7cbb2559';
+  final String base = "https://api.weatherapi.com/v1/current.json?key={API key}={lat},{lon}&aqi=no"; // "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
 
   static final Weather _instance = Weather.internal();
 
@@ -55,14 +54,14 @@ class Weather {
       List<dynamic> data = json.decode("[" + response.body + "]");
 
       Map<String, dynamic> map = data[0];
-      Map<String, dynamic> main = map['main'];
-      Map<String, dynamic> weather = map['weather'][0];
+      Map<String, dynamic> current = map['main'];
+      Map<String, dynamic> condition = map['condition'];
 
-      temp = main['temp'].toString();
-      status = weather['description'].toString();
-      icon = weather['icon'].toString();
+      temp = current['temp_c'].toString();
+      status = condition['text'].toString();
+      icon = condition['icon'].toString();
 
-      if (icon.contains('d'))
+      if (icon.contains('day'))
         dyNght = 'D';
       else
         dyNght = 'N';
