@@ -2,11 +2,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:weather/models/location.dart';
+import '../global.dart' as globals;
 
 class Weather {
-  final String apiKey = "cda95ca8086740b197d144017213008&q"; //'3ef171058f28b690a82e767a7cbb2559';
-  final String base = "https://api.weatherapi.com/v1/current.json?key={API key}={lat},{lon}&aqi=no"; // "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API key}&lang=pt_br";
-
   static final Weather _instance = Weather.internal();
 
   factory Weather() => _instance;
@@ -43,10 +41,10 @@ class Weather {
   Future<void> fetchForecast(Location location) async {
     if (location.geocode == null) return null;
 
-    String urlRequest = base
+    String urlRequest = globals.base
         .replaceAll("{lat}", location.geocode.split(",")[0])
         .replaceAll("{lon}", location.geocode.split(",")[1])
-        .replaceAll("{API key}", apiKey);
+        .replaceAll("{API key}", globals.apiKey);
 
     http.Response response = await http.get(urlRequest);
 
@@ -54,8 +52,8 @@ class Weather {
       List<dynamic> data = json.decode("[" + response.body + "]");
 
       Map<String, dynamic> map = data[0];
-      Map<String, dynamic> current = map['main'];
-      Map<String, dynamic> condition = map['condition'];
+      Map<String, dynamic> current = map['current'];
+      Map<String, dynamic> condition = current['condition'];
 
       temp = current['temp_c'].toString();
       status = condition['text'].toString();

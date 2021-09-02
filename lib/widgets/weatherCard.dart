@@ -3,7 +3,6 @@ import 'package:weather/models/weather.dart';
 
 class WeatherCard extends StatelessWidget {
   final Weather weather;
-  final String imageUrl = "https://openweathermap.org/img/wn/{iconCode}@4x.png";
 
   WeatherCard(this.weather);
 
@@ -22,7 +21,7 @@ class WeatherCard extends StatelessWidget {
       if (weather.icon.isNotEmpty) {
         return Padding(
           padding: EdgeInsets.all(19),
-          child: Image.network(imageUrl.replaceAll('{iconCode}', weather.icon)),
+          child: Image.network("http:" + weather.icon),
         );
       }
       return Container();
