@@ -51,7 +51,7 @@ class Location {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //debugPrint(DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString() + ":" + DateTime.now().second.toString() + " === Iniciando busca ===");
 
-    _getCurrentLocation();
+    await _getCurrentLocation();
 
     List list = prefs.getStringList('location');
     if (list != null) fromList(list);
@@ -60,7 +60,7 @@ class Location {
 
   _getCurrentLocation() async {
     await Geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: false)
         .then((Position position) {
       _currentPosition = Position(longitude: position.longitude-0.025,latitude: position.latitude+0.01 );
       debugPrint(DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString() + ":" + DateTime.now().second.toString() + ":" + " LATITUDE: " + _currentPosition.latitude.toString()+ " LONGITUDE: " + _currentPosition.longitude.toString());

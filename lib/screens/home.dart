@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
             leading: IconButton(
               icon: Icon(Icons.refresh, color: Theme.of(context).accentColor),
               onPressed: () {
-                bloc.main();
+                bloc.updateWeather();
               },
             ),
             flexibleSpace: FlexibleSpaceBar(

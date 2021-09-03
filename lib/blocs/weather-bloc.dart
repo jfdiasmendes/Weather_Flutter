@@ -27,6 +27,12 @@ class WeatherBloc {
     }
   }
 
+  void updateWeather() async {
+    if (location?.geocode != null) {
+      await weatherStart(location);
+    }
+  }
+
   Future<void> weatherStart(location) async {
     await weather.fetchForecast(location);
     _weatherController.add(weather);
